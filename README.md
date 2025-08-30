@@ -38,13 +38,6 @@ Deployed via HTTPS (Render.com) for safe sharing.
 ### 💜 Modern UI
 Beautiful, dark-themed chat interface.
 
----
-
-# 🖼️ Nick UI Sneak Peek
-
-![Voice Agent Nick UI](static/nick-ui.png)
-
----
 
 # 🌟 What's New?
 
