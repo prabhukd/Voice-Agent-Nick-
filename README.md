@@ -1,9 +1,11 @@
-
 # 🤖 Voice Agent Nick: Your Real-Time Voice AI Companion
 
 Welcome to **Voice Agent Nick**! Nick is your friendly, emotionally intelligent voice assistant. He listens, responds with warmth, and chats in real-time—all in your browser.
 
 Let Nick brighten your day with cozy conversations, live weather updates, real-time web search, and a sprinkle of personality! 💜
+
+---
+
 
 ---
 
@@ -38,6 +40,13 @@ Deployed via HTTPS (Render.com) for safe sharing.
 ### 💜 Modern UI
 Beautiful, dark-themed chat interface.
 
+---
+
+# 🖼️ Nick UI Sneak Peek
+
+![Voice Agent Nick UI](static/nick-ui.png)
+
+---
 
 # 🌟 What's New?
 
@@ -69,6 +78,7 @@ FastAPI (Python), Murf TTS, Gemini LLM, AssemblyAI, WeatherAPI, Tavily
 
 ## 🚀 Try Nick Instantly
 Nick is live & ready to chat on Render : https://voice-agent-nick-6.onrender.com/
+
 
 Just open the link, enter your API keys, and say hello!
 
