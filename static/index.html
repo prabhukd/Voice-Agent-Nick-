@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>AI Voice Agent 🎙️</title>
+	<link rel="stylesheet" href="/static/style.css">
+	<link rel="icon" type="image/svg+xml" href="/static/favicon.ico">
+	<style>
+		body {
+			background: radial-gradient(ellipse at top left, #2a0033 60%, #1a0022 100%);
+			color: #fff;
+			font-family: 'Montserrat', Arial, sans-serif;
+			min-height: 100vh;
+			margin: 0;
+			padding: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.apikey-blur-overlay {
+			position: fixed;
+			top: 0; left: 0; right: 0; bottom: 0;
+			background: rgba(30,0,40,0.7);
+			backdrop-filter: blur(4px);
+			z-index: 100;
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.3s;
+		}
+		.apikey-blur-overlay.show {
+			opacity: 1;
+			pointer-events: all;
+		}
+		.apikey-modal {
+			position: fixed;
+			top: 50%; left: 50%;
+			transform: translate(-50%, -50%) scale(0.98);
+			background: #2a0033;
+			border-radius: 1.5em;
+			box-shadow: 0 0 40px #a259ff55, 0 0 10px #0008;
+			min-width: 350px;
+			max-width: 400px;
+			z-index: 101;
+			display: none;
+			animation: fadeIn 0.7s;
+		}
+		.apikey-modal.show {
+			display: block;
+			animation: fadeIn 0.7s;
+		}
+		.apikey-modal-content {
+			padding: 2.5em 2em 2em 2em;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+		.apikey-title {
+			margin-top: 0;
+			font-size: 2.1em;
+			font-weight: bold;
+			color: #a259ff;
+			letter-spacing: 1px;
+			margin-bottom: 1.2em;
+		}
+		.apikey-fields {
+			width: 100%;
+		}
+		.apikey-field-block {
+			margin-bottom: 1.2em;
+			width: 100%;
+		}
+		.apikey-field-block label {
+			display: block;
+			font-size: 1.1em;
+			color: #fff;
+			margin-bottom: 0.3em;
+		}
+		.apikey-field-block input {
+			width: 100%;
+			padding: 0.6em 1em;
+			border-radius: 0.7em;
+			border: none;
+			background: #1a0022;
+			color: #fff;
+			font-size: 1em;
+			box-shadow: 0 0 5px #a259ff33;
+		}
+		.apikey-save-btn {
+			background: linear-gradient(90deg, #a259ff 60%, #7c2ae8 100%);
+			color: #fff;
+			border: none;
+			border-radius: 1em;
+			font-size: 1.1em;
+			padding: 0.7em 2.5em;
+			margin-top: 0.5em;
+			cursor: pointer;
+			box-shadow: 0 0 10px #a259ff88;
+			transition: background 0.2s;
+		}
+		.apikey-save-btn:hover {
+			background: linear-gradient(90deg, #7c2ae8 60%, #a259ff 100%);
+		}
+		#keyStatus {
+			color: #0f0;
+			margin-top: 1em;
+			font-size: 1.1em;
+			min-height: 1.5em;
+			text-align: center;
+		}
+		.container {
+			margin: 0 auto;
+			background: #22002a;
+			border-radius: 2em;
+			box-shadow: 0 0 40px #a259ff33, 0 0 30px #000a;
+			width: 500px;
+			min-height: 600px;
+			padding: 2em;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			animation: fadeIn 0.7s;
+		}
+		.apikey-fab {
+			background: #fff2;
+			border: none;
+			border-radius: 1em;
+			font-size: 1.5em;
+			width: 3em;
+			text-align: center;
+			cursor: pointer;
+			margin-bottom: 1em;
+			transition: background 0.2s;
+			align-self: flex-end;
+		}
+		.apikey-fab:hover {
+			background: #a259ff44;
+		}
+		.controls-box button {
+			background: linear-gradient(90deg, #a259ff 60%, #7c2ae8 100%);
+			color: #fff;
+			border: none;
+			border-radius: 1em;
+			font-size: 1.3em;
+			padding: 0.7em 2em;
+			margin-top: 2em;
+			cursor: pointer;
+			box-shadow: 0 0 10px #a259ff88;
+			transition: background 0.2s;
+		}
+		.controls-box button:disabled {
+			background: #444;
+			color: #aaa;
+			cursor: not-allowed;
+		}
+		.controls-box button:hover:not(:disabled) {
+			background: linear-gradient(90deg, #7c2ae8 60%, #a259ff 100%);
+		}
+		.chat-section {
+			background: #1a0022;
+			border-radius: 1em;
+			margin-top: 2em;
+			width: 100%;
+			min-height: 300px;
+			box-shadow: 0 0 10px #0006;
+			padding: 1em;
+		}
+		@keyframes fadeIn {
+			from { opacity: 0; transform: translateY(30px); }
+			to { opacity: 1; transform: translateY(0); }
+		}
+	</style>
+<body>
+				<div id="apikey-blur-overlay" class="apikey-blur-overlay"></div>
+				<div id="apikey-modal" class="apikey-modal">
+				<div class="apikey-modal-content">
+					<!-- Remove close button to force onboarding -->
+					<h2 class="apikey-title">API Key Configuration</h2>
+							<div class="apikey-fields">
+								<div class="apikey-field-block">
+									<label for="geminiKey">Gemini API Key</label>
+									<input type="password" id="geminiKey" autocomplete="off" />
+								</div>
+								<div class="apikey-field-block">
+									<label for="murfKey">Murf API Key</label>
+									<input type="password" id="murfKey" autocomplete="off" />
+								</div>
+								<div class="apikey-field-block">
+									<label for="assemblyKey">AssemblyAI API Key</label>
+									<input type="password" id="assemblyKey" autocomplete="off" />
+								</div>
+							</div>
+					<button id="saveKeysBtn" class="apikey-save-btn">Save Keys</button>
+
+					<div id="keyStatus"></div>
+				</div>
+			</div>
+		<div class="container">
+			<button id="openApiKeyModalBtn" class="apikey-fab" title="Configure API Keys">🔑</button>
+		<h1>🤖 Voice Agent Nick</h1>
+		<div class="controls-box">
+			<button id="startAndstopBtn" disabled>🎤 Start Recording</button>
+			<div id="loading" style="display:none;">⏳ Listening...</div>
+		</div>
+		<div class="chat-section">
+			<div id="chat-log" class="chat-log"></div>
+		</div>
+		<audio id="tts-audio" hidden autoplay></audio>
+	</div>
+	<script src="/static/main.js"></script>
+</body>
+</html>
