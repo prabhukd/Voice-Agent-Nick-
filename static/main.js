@@ -116,7 +116,8 @@ let audioStreamPlaying = false;
 
 async function startStreamingVoiceAgent() {
   // Send API keys as first message after connect
-  wsVoice = new WebSocket(`ws://${location.host}/ws/voice`);
+ const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+wsVoice = new WebSocket(`${wsProtocol}//${location.host}/ws/voice`);
   wsVoice.binaryType = "arraybuffer";
   wsVoice.onopen = () => {
     console.log("Voice WebSocket connected");
